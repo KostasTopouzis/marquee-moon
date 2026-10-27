@@ -1,5 +1,16 @@
 # The Marquee Moon changelog
 
+v0.1.2: Backend review skill and TMDB service draft | Category: architecture, tooling | 2026-10-27 19:24
+
+- .claude/skills/backend-api-review/SKILL.md: new skill for reviewing
+  backend and API code (secrets, authentication, authorization,
+  validation, external API clients, endpoint design, readability and
+  full-stack integration).
+- src/services/api.js: first draft of the TMDB client with popular-movies
+  and search requests. Not yet wired into the UI.
+- CLAUDE.md: changelog entries may be split across two categories; added
+  the tooling category.
+
 v0.1.2: Marquee Moon favicon | Category: frontend | 2026-10-27 16:38
 
 - public/favicon.svg: replaced the default Vite logo with an amber crescent

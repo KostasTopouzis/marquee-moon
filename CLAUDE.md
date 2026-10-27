@@ -26,7 +26,10 @@ Existing categories:
 - architecture
 - code formatting
 - frontend
+- tooling
 
 If no existing category is applicable, create a new fitting one for the change and include in the list above.
+
+You can split an update to two categories if the changes involve more than one general category.
 
 Don't forget to update the version number in `package-lock.json`, `package.json`, and `README.md`.
