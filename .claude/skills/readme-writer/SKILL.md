@@ -26,6 +26,8 @@ Always include (or retain, if present) the following sections:
 
 - Areas for improvement: a short summary of some areas that the project could be improved. Draw them from `docs/to_improve.md`. Ommit section if that file is empty or non-existent.
 
+- AI-Assisted Development: a disclaimer on how I used AI agents in the cretion of the project. Leave blank so I can write it myself.
+
 - How to run: instructions on how to run and test the project. If the project is a website, provide only a placeholder for the url link.
 
 - Troubleshooting: optional section with material concerning troubleshooting. Draw it from `docs/troubleshooting.md`. Ommit section if that file is empty or missing.
