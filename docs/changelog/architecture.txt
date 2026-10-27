@@ -2,6 +2,13 @@
 
 ## Architecture changelog
 
+v0.6.1: Remove unused src/css folder | 2026-10-27 14:40
+
+- src/css/: deleted the six stylesheets (App, Favorites, Home, MovieCard,
+  NavBar and index). Nothing imported them; styling now comes from
+  Tailwind classes and src/index.css.
+- package.json, package-lock.json: version bumped to 0.6.1.
+
 v0.5.1: Add GitHub Actions CI and pull request workflow | 2026-10-25 23:03
 
 - .github/workflows/ci.yml: new workflow that runs npm ci, npm run lint
