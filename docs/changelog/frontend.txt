@@ -1,0 +1,22 @@
+# The Marquee Moon changelog
+
+## Frontend design changelog
+
+v0.1.0: Marquee Moon redesign with Tailwind CSS | 2026-10-27 14:33
+
+- src/index.css: replaced the Roboto-only starter theme with Marquee design
+  tokens (warm ink surfaces, paper text, marquee amber accent), DM Serif
+  Display for headings, and a visible focus ring.
+- src/App.jsx: page shell with a full-height layout and a centred content
+  column.
+- src/components/NavBar.jsx: sticky header with the Marquee Moon wordmark and
+  NavLink active states.
+- src/components/MovieCard.jsx: 2:3 poster cards with a labelled "Add to
+  favorites" button, visible on touch and on hover or focus otherwise.
+- src/pages/Home.jsx: hero with a labelled search field, results heading with
+  a live count, responsive poster grid, and a no-results message. Posters are
+  now imported from src/assets, so they resolve in production builds. Movie
+  data is still mock.
+- src/pages/Favorites.jsx: empty state with a link back to browsing.
+- package.json, package-lock.json: version bumped to 0.6.0.
+
