@@ -46,7 +46,9 @@ AI-generated code was reviewed and adapted as needed. But the overall responsibi
 
 ## How to Run
 
-Requirements: a current Node.js LTS release and npm.
+Visit the live site: [https://marquee-moon.vercel.app/]
+
+Locally: you need to have a current Node.js LTS release and npm installed.
 
 ```bash
 # Install dependencies
@@ -64,8 +66,6 @@ npm run build
 # Serve the production build locally
 npm run preview
 ```
-
-<!-- Live site: [URL to be added] -->
 
 ## Future Goals
 
