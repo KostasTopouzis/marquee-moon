@@ -32,7 +32,7 @@ Marquee Moon is a movie aggregator that presents films in a clean, poster-first 
 
 Claude Code was used as an AI coding assistant during the development of this project. My emphasis as a developer and my learning goals (and, therefore, the skills this project is meant to demonstrate) are mostly focused in the following areas:
 
-- overal full-stack design and integration
+- overall full-stack design and integration
 - backend/database workflows, including data modelling and database schema design
 - data fetching/scraping/extraction/manipulation techniques
 - security concerns (authentication, validation, login mechanisms)
