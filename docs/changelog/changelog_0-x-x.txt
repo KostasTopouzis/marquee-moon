@@ -1,5 +1,17 @@
 # The Marquee Moon changelog
 
+v0.2.0: Load popular movies from the TMDB API | Category: architecture, frontend | 2026-10-27 22:33
+
+- src/services/api.js: rewrote the TMDB client around a shared tmdbFetch
+  helper (API base URL, Bearer read access token, query parameters,
+  abort signal, and an error for non-OK responses). Added a toMovie
+  mapper from TMDB results to the MovieCard shape, and named exports
+  getPopularMovies and searchMovies.
+- src/pages/Home.jsx: replaced the mock movie list with popular movies
+  fetched on mount, cancelled through an AbortController on unmount.
+  Added loading and error states.
+- package.json, package-lock.json, README.md: version bumped to 0.2.0.
+
 v0.1.2: Backend review skill and TMDB service draft | Category: architecture, tooling | 2026-10-27 19:24
 
 - .claude/skills/backend-api-review/SKILL.md: new skill for reviewing

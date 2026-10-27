@@ -1,47 +1,36 @@
 import MovieCard from '../components/MovieCard';
-import { useState } from 'react';
-// Mock data: placeholder posters until the TMDB API is connected
-import johnWick from '../assets/john-wick.jpg';
-import terminator from '../assets/terminator.jpg';
-import alien from '../assets/alien.jpg';
-import avatar from '../assets/avatar.jpg';
-import titanic from '../assets/titanic.jpg';
+import { useState, useEffect } from 'react';
+import { getPopularMovies, searchMovies } from '../services/api';
 
-const movies = [
-    {
-        id: 1,
-        title: 'John Wick',
-        release_date: '2021',
-        imageUrl: johnWick
-    },
-    {
-        id: 2,
-        title: 'The Terminator',
-        release_date: '1984',
-        imageUrl: terminator
-    },
-    {
-        id: 3,
-        title: 'Alien',
-        release_date: '1979',
-        imageUrl: alien
-    },
-    {
-        id: 4,
-        title: 'Avatar',
-        release_date: '2012',
-        imageUrl: avatar
-    },
-    {
-        id: 5,
-        title: 'Titanic',
-        release_date: '1998',
-        imageUrl: titanic
-    }
-];
 
 export default function Home() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [movies, setMovies] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        const loadPopularMovies = async () => {
+            try {
+                const popularMovies = await getPopularMovies(controller.signal);
+                setMovies(popularMovies);
+            } catch(err) {
+                console.error(err);
+                setError('Failed to load movies...');
+            } finally {
+                if(!controller.signal.aborted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadPopularMovies();
+
+        return () => controller.abort();
+
+        }, [])
 
     const filteredMovies = movies.filter((movie) =>
         movie.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -88,19 +77,22 @@ export default function Home() {
                     </p>
                 </div>
 
-                {filteredMovies.length > 0 ? (
-                    <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-10 md:gap-x-6">
-                        {filteredMovies.map((movie) => (
-                            <li key={'movie-' + movie.id}>
-                                <MovieCard movie={movie} />
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p className="py-16 text-center text-muted">
-                        No films match &ldquo;{searchQuery}&rdquo;. Try a different title.
-                    </p>
-                )}
+                {error && <div>{error}</div>}
+
+                {loading ? (<div className="py-16 text-center text-muted">Loading...</div>) : (
+                    filteredMovies.length > 0 ? (
+                        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-10 md:gap-x-6">
+                            {filteredMovies.map((movie) => (
+                                <li key={'movie-' + movie.id}>
+                                    <MovieCard movie={movie} />
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="py-16 text-center text-muted">
+                            No films match &ldquo;{searchQuery}&rdquo;. Try a different title.
+                        </p>
+                    ))}
             </section>
         </div>
     );
