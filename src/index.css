@@ -1,6 +1,28 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Roboto:wght@400;500;700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-roboto: "Roboto", sans-serif;
+  /* Surfaces: a warm projection-room black instead of pure black or grey */
+  --color-ink: #0e0d0c;
+  --color-surface: #1a1816;
+  --color-surface-raised: #26231f;
+  --color-line: #3a352f;
+
+  /* Text */
+  --color-paper: #f3eadb;
+  --color-muted: #b0a698;
+
+  /* Accent: the marquee bulb. Reserved for primary actions and focus */
+  --color-marquee: #f2b33d;
+  --color-marquee-hover: #ffc965;
+
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "DM Serif Display", Georgia, serif;
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-marquee);
+    outline-offset: 3px;
+  }
 }
