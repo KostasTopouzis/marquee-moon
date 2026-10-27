@@ -2,13 +2,7 @@
 
 Marquee Moon is a movie aggregator that presents films in a clean, poster-first layout. It is a React single-page application styled with Tailwind CSS. Browsing, search and favorites are in place, but the movie data is still mock data. Connecting to the TMDB API is the next planned step.
 
-<!--
-Screenshot boilerplate. Replace the path with your image or GIF, then remove this comment:
-
-![Marquee Moon home page](docs/screenshots/home.png)
--->
-
-_Screenshot to be added._
+![Marquee Moon home page](/public/home-page.png)
 
 ## New Features (v0.1.1)
 
@@ -34,6 +28,22 @@ _Screenshot to be added._
 - design better solutions for potential users.
 - be able to begin from a basic, generic functionality and gradually provide a more expertized and distinctive application purpose.
 
+## AI-Assisted Development
+
+Claude Code was used as an AI coding assistant during the development of this project. My emphasis as a developer and my learning goals (and, therefore, the skills this project is meant to demonstrate) are mostly focused in the following areas:
+
+- overal full-stack design and integration
+- backend/database workflows, including data modelling and database schema design
+- data fetching/scraping/extraction/manipulation techniques
+- security concerns (authentication, validation, login mechanisms)
+- implementation of appropriate business practices
+
+It is impossible in our times to fully separate code written by AI and human hand, but my contribution is more acutely felt in the areas above. For this project then, I take a greater share of responsibility for the code handling API requests, data manipulation/management, general backend logic and DevOps practices. And of course setting up the project and creating its initial template, defining its purpose and requirements, directing design iterations, reviewing generated code and integrating components into the application.
+
+Now, in other areas... well, besides using Claude Code as a general assistant to speed up processes, I particularly used its services for UI design exploration, visual styling, and implementation of frontend components. My usual strategy is to describe the brand/project aimed aesthetic and target audience (`docs/ai/design-directions/brand-character.md`), create or adjust the necessary skills (as found in the relevant `.claude` folder), set up guidelines and then ask it to present me with two or three alternative stylings that I can review and choose from. Then, I may tinker a bit with the code myself to refine them further.
+
+AI-generated code was reviewed and adapted as needed. But the overall responsibility and any possible flaws of the project are mine.
+
 ## How to Run
 
 Requirements: a current Node.js LTS release and npm.
@@ -55,7 +65,7 @@ npm run build
 npm run preview
 ```
 
-Live site: [URL to be added]
+<!-- Live site: [URL to be added] -->
 
 ## Future Goals
 
