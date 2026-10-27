@@ -27,6 +27,7 @@ Marquee Moon is a movie aggregator that presents films in a clean, poster-first 
 - improve my experience with data fetching and API requests.
 - design better solutions for potential users.
 - be able to begin from a basic, generic functionality and gradually provide a more expertized and distinctive application purpose.
+- increase my experience and familiarity with DevOps practices, CI/CD operations, and professional development workflows.
 
 ## AI-Assisted Development
 
