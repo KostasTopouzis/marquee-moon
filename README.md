@@ -30,6 +30,10 @@ _Screenshot to be added._
 
 ## Learning Goals
 
+- improve my experience with data fetching and API requests.
+- design better solutions for potential users.
+- be able to begin from a basic, generic functionality and gradually provide a more expertized and distinctive application purpose.
+
 ## How to Run
 
 Requirements: a current Node.js LTS release and npm.
