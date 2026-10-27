@@ -2,6 +2,14 @@
 
 ## Frontend design changelog
 
+v0.1.1: Marquee Moon favicon | 2026-10-27 16:38
+
+- public/favicon.svg: replaced the default Vite logo with an amber crescent
+  moon, a row of marquee bulbs and a lit bulb on the warm ink tile.
+- public/apple-touch-icon.png: 180px full-bleed PNG export of the favicon
+  for iOS home screens and older Safari.
+- index.html: linked the apple-touch-icon.
+
 v0.1.0: Marquee Moon redesign with Tailwind CSS | 2026-10-27 14:33
 
 - src/index.css: replaced the Roboto-only starter theme with Marquee design
