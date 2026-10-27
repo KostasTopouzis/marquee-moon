@@ -1,10 +1,10 @@
-# Marquee Moon v0.1.1
+# Marquee Moon v0.1.2
 
 Marquee Moon is a movie aggregator that presents films in a clean, poster-first layout. It is a React single-page application styled with Tailwind CSS. Browsing, search and favorites are in place, but the movie data is still mock data. Connecting to the TMDB API is the next planned step.
 
 ![Marquee Moon home page](/public/home-page.png)
 
-## New Features (v0.1.1)
+## New Features (v0.1.2)
 
 - Marquee visual identity: a warm ink background, paper-coloured text, a single amber accent, and a serif display face for the wordmark and headings.
 - Sticky navigation bar with active-page indicators and a Favorites page.

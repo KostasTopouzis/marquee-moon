@@ -1,8 +1,6 @@
 # The Marquee Moon changelog
 
-## Frontend design changelog
-
-v0.1.1: Marquee Moon favicon | 2026-10-27 16:38
+v0.1.2: Marquee Moon favicon | Category: frontend | 2026-10-27 16:38
 
 - public/favicon.svg: replaced the default Vite logo with an amber crescent
   moon, a row of marquee bulbs and a lit bulb on the warm ink tile.
@@ -10,7 +8,14 @@ v0.1.1: Marquee Moon favicon | 2026-10-27 16:38
   for iOS home screens and older Safari.
 - index.html: linked the apple-touch-icon.
 
-v0.1.0: Marquee Moon redesign with Tailwind CSS | 2026-10-27 14:33
+v0.1.1: Remove unused src/css folder | Category: architecture | 2026-10-27 14:40
+
+- src/css/: deleted the six stylesheets (App, Favorites, Home, MovieCard,
+  NavBar and index). Nothing imported them; styling now comes from
+  Tailwind classes and src/index.css.
+- package.json, package-lock.json: version bumped to 0.1.1.
+
+v0.1.0: Marquee Moon redesign with Tailwind CSS | Category: frontend | 2026-10-27 14:33
 
 - src/index.css: replaced the Roboto-only starter theme with Marquee design
   tokens (warm ink surfaces, paper text, marquee amber accent), DM Serif
@@ -27,4 +32,3 @@ v0.1.0: Marquee Moon redesign with Tailwind CSS | 2026-10-27 14:33
   data is still mock.
 - src/pages/Favorites.jsx: empty state with a link back to browsing.
 - package.json, package-lock.json: version bumped to 0.6.0.
-

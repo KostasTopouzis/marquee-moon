@@ -1,4 +1,0 @@
-# The Marquee Moon changelog
-
-## Code formatting changelog
-
