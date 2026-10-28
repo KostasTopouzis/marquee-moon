@@ -1,18 +1,13 @@
-# Marquee Moon v0.2.0
+# Marquee Moon v0.3.0
 
-Marquee Moon is a movie aggregator that presents films in a clean, poster-first layout. It is a React single-page application styled with Tailwind CSS. Browsing, search and favorites are in place, but the movie data is still mock data. Connecting to the TMDB API is the next planned step.
+Marquee Moon is an aggregator page that presents films in a clean, poster-first layout. At this stage it is a React single-page application styled with Tailwind CSS and allows browsing and searching of movies as well as creating your own favorites list. I am currently fetching data from the TMDB API, but my future goal is to draw from many different sources and perhaps even creating a multi-page structure that will allow users to browse other multimedia types like television series, music albums, radio shows, theatre productions, etc.
 
 ![Marquee Moon home page](/public/home-page.png)
 
-## New Features (v0.1.2)
+## New Features (v0.3.0)
 
-- Marquee visual identity: a warm ink background, paper-coloured text, a single amber accent, and a serif display face for the wordmark and headings.
-- Sticky navigation bar with active-page indicators and a Favorites page.
-- Hero search field with a live result count and a clear no-results message.
-- Poster grid that adapts from two to five columns across phone, tablet and desktop widths.
-- Favorite buttons that stay visible on touch screens and appear on hover or keyboard focus on larger screens.
-- Visible focus rings and labelled controls for keyboard and screen reader users.
-- Removed the unused legacy stylesheets, so all styling now comes from Tailwind classes and a single theme file.
+- Search now covers the full TMDB catalogue: type a title and press Search to replace the grid with the matching films.
+- Movie cards show each film's release year.
 
 ## Tech Stack
 
@@ -24,9 +19,11 @@ Marquee Moon is a movie aggregator that presents films in a clean, poster-first 
 
 ## Learning Goals
 
-- improve my experience with data fetching and API requests.
+- improve my experience with data fetching and API requests, and deal with the various problems that arise in the process.
 - design better solutions for potential users.
 - be able to begin from a basic, generic functionality and gradually provide a more expertized and distinctive application purpose.
+- get deeper into React and explore its potential at greater depth.
+- get an even more concrete understanding of browser behavior and debugging approaches.
 - increase my experience and familiarity with DevOps practices, CI/CD operations, and professional development workflows.
 
 ## AI-Assisted Development
@@ -70,15 +67,20 @@ npm run preview
 
 ## Future Goals
 
-Connect the application to the TMDB API so that films, posters and details come from live data instead of the mock list.
+Implement the Favorites pages and its mechanism.
 
 ## To Fix
 
-- No known open bugs are recorded at this time.
+- In development, "Failed to load movies..." appears above the grid even when the films load. React's Strict Mode cancels the first request on purpose, and the error handler treats that cancellation as a failure.
+- `npm run lint` fails because `searchMovies` is imported in `Home.jsx` but not used yet.
+
+## To Improve
+
+- **Search engine UX**: the current setup is misleading. The user doesn't understand that they need to press the Search button to perform a search on all available movies and not just the already existing most popular ones. **Suggestion**: add filters for searching (e.g, Popular Movies This Week) and so the search engine takes the filters into account to limit the sample in which it performs the search. This way, I can give the users the hints they need to know what to expect from the search engine's behavior.
 
 ## Insights
 
-Check the docs folder for interesting material concerning this project, like the problems I faced during its construction, skills I learned or improved, areas I hope to improve in the future, and general realizations or thoughts I had during this project.
+Check the docs folder for material concerning this project: bugs that remain to be fixed, areas that still need improvement, the problems I faced during the project's construction, skills I learned or improved, areas I hope to improve in the future, and general realizations or thoughts I had during this project.
 
 ## License
 

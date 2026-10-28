@@ -26,7 +26,7 @@ export default function MovieCard({ movie }) {
 
             <div className="flex flex-col gap-0.5">
                 <h3 className="text-base sm:text-lg font-medium leading-snug text-paper">{movie.title}</h3>
-                <p className="text-sm text-muted">{movie.release_date}</p>
+                <p className="text-sm text-muted">{movie.releaseYear}</p>
             </div>
         </article>
     );
