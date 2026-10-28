@@ -1,6 +1,6 @@
 ---
 name: prepare-commit
-description: Prepare the repository for a git commit by updating the changelog, version numbers and README, then propose a commit message and wait for approval. Does not commit on its own.
+description: Prepare the repository for a git commit by updating the changelog, version numbers and README, then propose a commit message and wait for approval. Approval will be indicated with the word 'Approve'. Does not commit on its own.
 disable-model-invocation: true
 ---
 
