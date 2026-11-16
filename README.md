@@ -1,18 +1,15 @@
-# Marquee Moon v0.1.2
+# Marquee Moon v0.4.0
 
-Marquee Moon is a movie aggregator that presents films in a clean, poster-first layout. It is a React single-page application styled with Tailwind CSS. Browsing, search and favorites are in place, but the movie data is still mock data. Connecting to the TMDB API is the next planned step.
+Marquee Moon is an aggregator page that presents films in a clean, poster-first layout. At this stage it is a React single-page application styled with Tailwind CSS and allows browsing and searching of movies as well as creating your own favorites list. I am currently fetching data from the TMDB API, but my future goal is to draw from many different sources and perhaps even creating a multi-page structure that will allow users to browse other multimedia types like television series, music albums, radio shows, theatre productions, etc.
 
 ![Marquee Moon home page](/public/home-page.png)
 
-## New Features (v0.1.2)
+## New Features (v0.4.0)
 
-- Marquee visual identity: a warm ink background, paper-coloured text, a single amber accent, and a serif display face for the wordmark and headings.
-- Sticky navigation bar with active-page indicators and a Favorites page.
-- Hero search field with a live result count and a clear no-results message.
-- Poster grid that adapts from two to five columns across phone, tablet and desktop widths.
-- Favorite buttons that stay visible on touch screens and appear on hover or keyboard focus on larger screens.
-- Visible focus rings and labelled controls for keyboard and screen reader users.
-- Removed the unused legacy stylesheets, so all styling now comes from Tailwind classes and a single theme file.
+- A backend layer of Vercel Functions now talks to TMDB, so the API token stays on the server and never reaches the browser.
+- Clear error messages that tell you whether the movie service is busy, down, or unreachable.
+- Typing in the search box no longer hides results: the grid always shows what your last search returned, and an empty search brings back the popular films.
+- Films without a poster show a title card instead of a broken image.
 
 ## Tech Stack
 
@@ -24,18 +21,20 @@ Marquee Moon is a movie aggregator that presents films in a clean, poster-first 
 
 ## Learning Goals
 
-- improve my experience with data fetching and API requests.
+- improve my experience with data fetching and API requests, and deal with the various problems that arise in the process.
 - design better solutions for potential users.
 - be able to begin from a basic, generic functionality and gradually provide a more expertized and distinctive application purpose.
+- get deeper into React and explore its potential at greater depth.
+- get an even more concrete understanding of browser behavior and debugging approaches.
 - increase my experience and familiarity with DevOps practices, CI/CD operations, and professional development workflows.
 
 ## AI-Assisted Development
 
-Claude Code was used as an AI coding assistant during the development of this project. My emphasis as a developer and my learning goals (and, therefore, the skills this project is meant to demonstrate) are mostly focused in the following areas:
+Claude Code was used as an AI coding assistant during the development of this project. My learning goals for this project (and, therefore, the skills it is meant to demonstrate) are mostly focused in the following areas:
 
 - overall full-stack design and integration
-- backend/database workflows, including data modelling and database schema design
-- data fetching/scraping/extraction/manipulation techniques
+- implementation of serverless programming patterns
+- data fetching from external API sources
 - security concerns (authentication, validation, login mechanisms)
 - implementation of appropriate business practices
 
@@ -49,14 +48,27 @@ AI-generated code was reviewed and adapted as needed. But the overall responsibi
 
 Visit the live site: [https://marquee-moon.vercel.app/]
 
-Locally: you need to have a current Node.js LTS release and npm installed.
+Locally: you need a current Node.js LTS release, npm, the [Vercel CLI](https://vercel.com/docs/cli) and a [TMDB API Read Access Token](https://developer.themoviedb.org/docs/getting-started).
+
+The app fetches its data through Vercel Functions in the `api/` folder, which hold the TMDB token on the server. `npm run dev` starts only the Vite frontend, so movies will not load with it. Use `vercel dev` instead, which runs the frontend and the functions together.
+
+1. Create a `.env.local` file in the project root with your token. Do not add the `VITE_` prefix, which would expose the token in the browser bundle:
+
+   ```
+   TMDB_READ_ACCESS_TOKEN=your_token_here
+   ```
+
+2. Install, link and run:
 
 ```bash
 # Install dependencies
 npm install
 
-# Start the development server (http://localhost:5173 by default)
-npm run dev
+# Link the folder to a Vercel project (first time only)
+vercel link
+
+# Start the frontend and the functions (http://localhost:3000 by default)
+vercel dev
 
 # Check the code with ESLint
 npm run lint
@@ -70,15 +82,19 @@ npm run preview
 
 ## Future Goals
 
-Connect the application to the TMDB API so that films, posters and details come from live data instead of the mock list.
+Implement pagination, so that searches can display more than the first 20 results.
 
 ## To Fix
 
-- No known open bugs are recorded at this time.
+- A pagination mechanism needs to be applied to allow more results to display upon search.
+
+## To Improve
+
+- **Search engine UX**: the current setup is misleading. The user doesn't understand that they need to press the Search button to perform a search on all available movies and not just the already existing most popular ones. **Suggestion**: add filters for searching (e.g, Popular Movies This Week) and so the search engine takes the filters into account to limit the sample in which it performs the search. This way, I can give the users the hints they need to know what to expect from the search engine's behavior.
 
 ## Insights
 
-Check the docs folder for interesting material concerning this project, like the problems I faced during its construction, skills I learned or improved, areas I hope to improve in the future, and general realizations or thoughts I had during this project.
+Check the docs folder for material concerning this project: bugs that remain to be fixed, areas that still need improvement, the problems I faced during the project's construction, skills I learned or improved, areas I hope to improve in the future, and general realizations or thoughts I had during this project.
 
 ## License
 

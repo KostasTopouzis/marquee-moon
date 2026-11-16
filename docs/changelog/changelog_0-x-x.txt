@@ -1,6 +1,136 @@
 # The Marquee Moon changelog
 
-v0.1.2: Marquee Moon favicon | Category: frontend | 2026-10-27 16:38
+v0.4.0: Move TMDB calls to Vercel Functions | 2026-11-16 11:51
+
+Category: architecture
+
+- api/_errors.js: HttpError class and toErrorResponse(), the single
+  place where server errors become { error: { code, message } } JSON.
+- api/_tmdb.js: server-side TMDB helper that reads the token from
+  process.env, times out after 8 seconds and maps TMDB failures to our
+  own status codes (401 -> 500, 429 -> 503, network -> 504, other 502).
+- api/movies/popular.js: GET /api/movies/popular with error handling
+  and a one-hour CDN cache header.
+- api/movies/index.js: GET /api/movies?query=... replaces the planned
+  search.js; validates the query (required, 100 characters maximum)
+  and forwards no other parameters to TMDB.
+- src/services/api.js: calls the /api endpoints instead of TMDB, so
+  the browser bundle no longer contains the token. New ApiError and
+  apiFetch turn error responses back into exceptions.
+
+Category: frontend
+
+- src/pages/Home.jsx: error messages depend on the status code;
+  aborted requests are no longer reported as failures, which removes
+  the false "Failed to load movies..." in development; a new search
+  cancels the request still in flight; the grid shows server results
+  without client-side filtering; an empty search returns to popular
+  films; the heading names the active query.
+- src/components/MovieCard.jsx: placeholder with the title when a
+  film has no poster or the image fails to load.
+
+Category: tooling
+
+- eslint.config.js: Node globals for api/ and the notes folder
+  ignored.
+- .gitignore: ignore .vercel and all .env files.
+
+Category: documentation
+
+- docs/progress.md: backend layer done; pagination is next, and
+  accessibility is added to the roadmap.
+- docs/problems_faced.md, docs/skills_improved.md: first entries on
+  moving the TMDB calls to serverless functions.
+- docs/to_fix.md: false error message fixed; pagination added.
+- README.md: How to Run now uses vercel dev and a server-side
+  TMDB_READ_ACCESS_TOKEN; Future Goals and To Fix point to pagination.
+- package.json, package-lock.json, README.md: version bumped to 0.4.0.
+
+
+v0.3.1: Merge TMDB search into main with CI | 2026-10-28 14:23
+
+Category: tooling
+
+- .github/workflows/ci.yml: GitHub Actions workflow that installs
+  dependencies, lints and builds on every push and pull request to main.
+
+Category: documentation
+
+- docs/progress.md: resolved the merge conflict between main and
+  feat/api-calls, keeping the updated roadmap.
+- package.json, package-lock.json, README.md: version bumped to 0.3.1.
+
+
+v0.3.0: Search TMDB and show release years | 2026-10-28 13:41
+
+Category: frontend
+
+- src/pages/Home.jsx: the search form now queries TMDB through
+  searchMovies and replaces the grid with the results, with loading and
+  error states. Empty queries and searches made while a request is
+  pending are ignored.
+- src/components/MovieCard.jsx: cards show the release year from the
+  service's releaseYear field instead of the missing release_date.
+- package.json, package-lock.json, README.md: version bumped to 0.3.0.
+
+Category: tooling
+
+- .claude/skills/prepare-commit/SKILL.md: new workflow that updates the
+  changelog, version numbers and README, then proposes a commit message
+  and waits for approval.
+- CLAUDE.md: moved the changelog rules into the prepare-commit skill;
+  commits now wait for approval.
+- docs/changelog/changelog_0-x-x.txt: entries reformatted with their
+  categories listed under each title.
+
+Category: documentation
+
+- docs/progress.md: marked the TMDB step done, set the Favorites page as
+  next, and added later goals (server-side API proxy, automated tests
+  with CI/CD, SEO, stronger security).
+- docs/to_fix.md, docs/to_improve.md: recorded open bugs and the search
+  UX issue.
+- README.md: rewrote the description, Learning Goals and Future Goals.
+
+
+v0.2.0: Load popular movies from the TMDB API | 2026-10-27 22:33
+
+Category: architecture
+
+- src/services/api.js: rewrote the TMDB client around a shared tmdbFetch
+  helper (API base URL, Bearer read access token, query parameters,
+  abort signal, and an error for non-OK responses). Added a toMovie
+  mapper from TMDB results to the MovieCard shape, and named exports
+  getPopularMovies and searchMovies.
+- package.json, package-lock.json, README.md: version bumped to 0.2.0.
+
+Category: frontend
+
+- src/pages/Home.jsx: replaced the mock movie list with popular movies
+  fetched on mount, cancelled through an AbortController on unmount.
+  Added loading and error states.
+
+
+v0.1.2: Backend review skill and TMDB service draft | 2026-10-27 19:24
+
+Category: architecture
+
+- src/services/api.js: first draft of the TMDB client with popular-movies
+  and search requests. Not yet wired into the UI.
+
+Category: tooling
+
+- .claude/skills/backend-api-review/SKILL.md: new skill for reviewing
+  backend and API code (secrets, authentication, authorization,
+  validation, external API clients, endpoint design, readability and
+  full-stack integration).
+- CLAUDE.md: changelog entries may be split across two categories; added
+  the tooling category.
+
+
+v0.1.2: Marquee Moon favicon | 2026-10-27 16:38
+
+Category: frontend
 
 - public/favicon.svg: replaced the default Vite logo with an amber crescent
   moon, a row of marquee bulbs and a lit bulb on the warm ink tile.
@@ -8,14 +138,20 @@ v0.1.2: Marquee Moon favicon | Category: frontend | 2026-10-27 16:38
   for iOS home screens and older Safari.
 - index.html: linked the apple-touch-icon.
 
-v0.1.1: Remove unused src/css folder | Category: architecture | 2026-10-27 14:40
+
+v0.1.1: Remove unused src/css folder | 2026-10-27 14:40
+
+Category: architecture
 
 - src/css/: deleted the six stylesheets (App, Favorites, Home, MovieCard,
   NavBar and index). Nothing imported them; styling now comes from
   Tailwind classes and src/index.css.
 - package.json, package-lock.json: version bumped to 0.1.1.
 
-v0.1.0: Marquee Moon redesign with Tailwind CSS | Category: frontend | 2026-10-27 14:33
+
+v0.1.0: Marquee Moon redesign with Tailwind CSS | 2026-10-27 14:33
+
+Category: frontend
 
 - src/index.css: replaced the Roboto-only starter theme with Marquee design
   tokens (warm ink surfaces, paper text, marquee amber accent), DM Serif

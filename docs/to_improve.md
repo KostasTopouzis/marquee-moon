@@ -1,0 +1,2 @@
+- UX for the search engine is misleading. The user doesn't understand that they need to press the Search button to perform a search on all available movies and not just the already existing most popular ones. Suggestion: add filters for searching, so Popular Movies This Week, for example, is a separate filter, and the search engine takes the filters into account to limit the sample in which it performs the search.
+- The search engine needs to update content upon typing without the user having to press the Search button.

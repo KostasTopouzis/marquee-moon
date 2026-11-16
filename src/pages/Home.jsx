@@ -1,55 +1,106 @@
 import MovieCard from '../components/MovieCard';
-import { useState } from 'react';
-// Mock data: placeholder posters until the TMDB API is connected
-import johnWick from '../assets/john-wick.jpg';
-import terminator from '../assets/terminator.jpg';
-import alien from '../assets/alien.jpg';
-import avatar from '../assets/avatar.jpg';
-import titanic from '../assets/titanic.jpg';
+import { useState, useEffect, useRef } from 'react';
+import { ApiError, getPopularMovies, searchMovies } from '../services/api';
 
-const movies = [
-    {
-        id: 1,
-        title: 'John Wick',
-        release_date: '2021',
-        imageUrl: johnWick
-    },
-    {
-        id: 2,
-        title: 'The Terminator',
-        release_date: '1984',
-        imageUrl: terminator
-    },
-    {
-        id: 3,
-        title: 'Alien',
-        release_date: '1979',
-        imageUrl: alien
-    },
-    {
-        id: 4,
-        title: 'Avatar',
-        release_date: '2012',
-        imageUrl: avatar
-    },
-    {
-        id: 5,
-        title: 'Titanic',
-        release_date: '1998',
-        imageUrl: titanic
+// Decides what the user sees when a request fails.
+// The service layer reports what went wrong; this page decides how to say it.
+function toErrorMessage(err, fallback) {
+    if(err instanceof ApiError) {
+        // 400 messages come from our own input validation and are safe to show
+        if(err.status === 400) return err.message;
+        if(err.status === 503) return 'The movie service is busy. Try again in a moment.';
+        if(err.status >= 500) return 'The movie service is having trouble. Try again later.';
+        return fallback;
     }
-];
+
+    // fetch rejects with a TypeError when the server can't be reached at all
+    if(err instanceof TypeError) return 'Could not reach the server. Check your connection.';
+
+    return fallback;
+}
 
 export default function Home() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [movies, setMovies] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    // The query whose results are on screen. Unlike searchQuery, it only changes
+    // when a search succeeds, so typing in the box doesn't affect the grid.
+    // An empty string means the grid shows popular movies.
+    const [activeQuery, setActiveQuery] = useState('');
 
-    const filteredMovies = movies.filter((movie) =>
-        movie.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // The controller of the request currently in flight (popular movies or a search).
+    // Only one request's results should ever reach the grid, so starting a new one
+    // cancels the previous one. A slow, older response can't overwrite a newer one.
+    const requestRef = useRef(null);
 
-    const handleSearch = (event) => {
+    function startRequest() {
+        requestRef.current?.abort();
+        const controller = new AbortController();
+        requestRef.current = controller;
+        return controller;
+    }
+
+    useEffect(() => {
+        const controller = startRequest();
+
+        const loadPopularMovies = async () => {
+            try {
+                const popularMovies = await getPopularMovies(controller.signal);
+                setMovies(popularMovies);
+                setError(null);
+            } catch(err) {
+                // A cancelled request isn't a failure. In development, StrictMode
+                // runs this effect twice and the cleanup aborts the first request.
+                if(err.name === 'AbortError')
+                    return;
+
+                console.error(err);
+                setError(toErrorMessage(err, 'Failed to load movies.'));
+            } finally {
+                if(!controller.signal.aborted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadPopularMovies();
+
+        // Cleanup on unmount: cancel whichever request is still running
+        return () => requestRef.current?.abort();
+    }, []);
+
+    const handleSearch = async (event) => {
         event.preventDefault();
-        alert("Hello");
+
+        const query = searchQuery.trim();
+
+        // Submitting an empty box after a search goes back to popular movies
+        if(!query && !activeQuery)
+            return;
+
+        // Supersedes any request still running, including a newer search
+        const controller = startRequest();
+
+        setLoading(true);
+        setError(null);
+        try {
+            const results = query
+                ? await searchMovies(query, controller.signal)
+                : await getPopularMovies(controller.signal);
+            setMovies(results);
+            setActiveQuery(query);
+        } catch(err) {
+            if(err.name === 'AbortError')
+                return;
+
+            console.error(err);
+            setError(toErrorMessage(err, query ? 'Failed to search movies.' : 'Failed to load movies.'));
+        } finally {
+            if(!controller.signal.aborted) {
+                setLoading(false);
+            }
+        }
     }
 
     return (
@@ -81,26 +132,33 @@ export default function Home() {
             <section aria-labelledby="results-heading" className="flex flex-col gap-8">
                 <div className="flex items-baseline justify-between gap-4 border-b border-line pb-4">
                     <h2 id="results-heading" className="font-display text-2xl sm:text-3xl text-paper">
-                        {searchQuery ? 'Results' : 'All films'}
+                        {activeQuery ? <>Results for &ldquo;{activeQuery}&rdquo;</> : 'All films'}
                     </h2>
                     <p className="text-sm text-muted" aria-live="polite">
-                        {filteredMovies.length} {filteredMovies.length === 1 ? 'title' : 'titles'}
+                        {movies.length} {movies.length === 1 ? 'title' : 'titles'}
                     </p>
                 </div>
 
-                {filteredMovies.length > 0 ? (
-                    <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-10 md:gap-x-6">
-                        {filteredMovies.map((movie) => (
-                            <li key={'movie-' + movie.id}>
-                                <MovieCard movie={movie} />
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p className="py-16 text-center text-muted">
-                        No films match &ldquo;{searchQuery}&rdquo;. Try a different title.
-                    </p>
-                )}
+                {error && <div role="alert">{error}</div>}
+
+                {loading ? (<div className="py-16 text-center text-muted">Loading...</div>) : (
+                    movies.length > 0 ? (
+                        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-10 md:gap-x-6">
+                            {movies.map((movie) => (
+                                <li key={'movie-' + movie.id}>
+                                    <MovieCard movie={movie} />
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        !error && (
+                            <p className="py-16 text-center text-muted">
+                                {activeQuery
+                                    ? <>No films match &ldquo;{activeQuery}&rdquo;. Try a different title.</>
+                                    : 'No films to show right now.'}
+                            </p>
+                        )
+                    ))}
             </section>
         </div>
     );

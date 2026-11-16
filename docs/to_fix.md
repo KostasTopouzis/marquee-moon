@@ -1,0 +1,1 @@
+- A pagination mechanism needs to be applied to allow more results to display upon search.
