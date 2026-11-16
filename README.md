@@ -1,14 +1,15 @@
-# Marquee Moon v0.3.1
+# Marquee Moon v0.4.0
 
 Marquee Moon is an aggregator page that presents films in a clean, poster-first layout. At this stage it is a React single-page application styled with Tailwind CSS and allows browsing and searching of movies as well as creating your own favorites list. I am currently fetching data from the TMDB API, but my future goal is to draw from many different sources and perhaps even creating a multi-page structure that will allow users to browse other multimedia types like television series, music albums, radio shows, theatre productions, etc.
 
 ![Marquee Moon home page](/public/home-page.png)
 
-## New Features (v0.3.1)
+## New Features (v0.4.0)
 
-- Search now covers the full TMDB catalogue: type a title and press Search to replace the grid with the matching films.
-- Movie cards show each film's release year.
-- Every push and pull request to main is linted and built automatically with GitHub Actions.
+- A backend layer of Vercel Functions now talks to TMDB, so the API token stays on the server and never reaches the browser.
+- Clear error messages that tell you whether the movie service is busy, down, or unreachable.
+- Typing in the search box no longer hides results: the grid always shows what your last search returned, and an empty search brings back the popular films.
+- Films without a poster show a title card instead of a broken image.
 
 ## Tech Stack
 
@@ -29,11 +30,11 @@ Marquee Moon is an aggregator page that presents films in a clean, poster-first 
 
 ## AI-Assisted Development
 
-Claude Code was used as an AI coding assistant during the development of this project. My emphasis as a developer and my learning goals (and, therefore, the skills this project is meant to demonstrate) are mostly focused in the following areas:
+Claude Code was used as an AI coding assistant during the development of this project. My learning goals for this project (and, therefore, the skills it is meant to demonstrate) are mostly focused in the following areas:
 
 - overall full-stack design and integration
-- backend/database workflows, including data modelling and database schema design
-- data fetching/scraping/extraction/manipulation techniques
+- implementation of serverless programming patterns
+- data fetching from external API sources
 - security concerns (authentication, validation, login mechanisms)
 - implementation of appropriate business practices
 
@@ -47,14 +48,27 @@ AI-generated code was reviewed and adapted as needed. But the overall responsibi
 
 Visit the live site: [https://marquee-moon.vercel.app/]
 
-Locally: you need to have a current Node.js LTS release and npm installed.
+Locally: you need a current Node.js LTS release, npm, the [Vercel CLI](https://vercel.com/docs/cli) and a [TMDB API Read Access Token](https://developer.themoviedb.org/docs/getting-started).
+
+The app fetches its data through Vercel Functions in the `api/` folder, which hold the TMDB token on the server. `npm run dev` starts only the Vite frontend, so movies will not load with it. Use `vercel dev` instead, which runs the frontend and the functions together.
+
+1. Create a `.env.local` file in the project root with your token. Do not add the `VITE_` prefix, which would expose the token in the browser bundle:
+
+   ```
+   TMDB_READ_ACCESS_TOKEN=your_token_here
+   ```
+
+2. Install, link and run:
 
 ```bash
 # Install dependencies
 npm install
 
-# Start the development server (http://localhost:5173 by default)
-npm run dev
+# Link the folder to a Vercel project (first time only)
+vercel link
+
+# Start the frontend and the functions (http://localhost:3000 by default)
+vercel dev
 
 # Check the code with ESLint
 npm run lint
@@ -68,12 +82,11 @@ npm run preview
 
 ## Future Goals
 
-Implement the Favorites pages and its mechanism.
+Implement pagination, so that searches can display more than the first 20 results.
 
 ## To Fix
 
-- In development, "Failed to load movies..." appears above the grid even when the films load. React's Strict Mode cancels the first request on purpose, and the error handler treats that cancellation as a failure.
-- `npm run lint` fails because `searchMovies` is imported in `Home.jsx` but not used yet.
+- A pagination mechanism needs to be applied to allow more results to display upon search.
 
 ## To Improve
 

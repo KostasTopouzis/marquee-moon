@@ -1,0 +1,1 @@
+- Unerstanding and obtaining further practical experience with serverless programming using Vercel functions.

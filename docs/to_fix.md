@@ -1,1 +1,1 @@
-- False error message. In development, "Failed to load movies..." appears above the grid even when films load.
+- A pagination mechanism needs to be applied to allow more results to display upon search.

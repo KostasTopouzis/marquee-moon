@@ -1,27 +1,36 @@
-const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
-const TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
 
-// Helper function for searchMovies() and getPopularMovies()
-// This is the only part of the code in this module that throws an error.
-// It is allowed to propagate up to Home.jsx: loadPopularMovies() in useEffect()
-// Cleaner structure, easy to follow the exception propagation path 
-// and consider its consequences 
-async function tmdbFetch(path, params = {}, signal) {
-    const url = new URL(BASE_URL + path);
+// The client-side twin of the server's HttpError.
+// Exceptions can't cross HTTP, so the server sends a status code and a JSON body,
+// and apiFetch() turns them back into an exception here in the browser.
+export class ApiError extends Error {
+    constructor(status, code, message) {
+        super(message);
+        this.name = 'ApiError';
+        this.status = status;
+        this.code = code;
+    }
+}
 
-    url.search = new URLSearchParams(params);
+// Helper for searchMovies() and getPopularMovies().
+// It talks only to our own /api endpoints; the TMDB token stays on the server.
+// It is the only part of this module that throws, and errors propagate up to Home.jsx:
+// - ApiError when our server answers with an error status
+// - TypeError on network failure, AbortError when the request is cancelled
+async function apiFetch(path, params = {}, signal) {
+    const url = new URL(path, window.location.origin);
+    url.search = new URLSearchParams(params).toString();
 
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${TOKEN}`,
-            accept: 'application/json'
-        },
-        signal,
-    });
+    const response = await fetch(url, { signal });
 
     if(!response.ok) {
-        throw new Error(`TMDB request failed: ${response.status} - ${response.statusText}`);
+        // Read the server's error shape; fall back if the body isn't JSON
+        const body = await response.json().catch(() => null);
+        throw new ApiError(
+            response.status,
+            body?.error?.code ?? 'UNKNOWN',
+            body?.error?.message ?? `Request failed: ${response.status}`
+        );
     }
 
     return response.json();
@@ -36,14 +45,15 @@ function toMovie(rawData) {
         imageUrl: rawData.poster_path ? IMAGE_BASE_URL + rawData.poster_path : null,
     };
 }
+
 export async function getPopularMovies(signal) {
-    const rawData = await tmdbFetch('/movie/popular', {}, signal);
+    const rawData = await apiFetch('/api/movies/popular', {}, signal);
 
     return rawData.results.map(toMovie);
 }
 
 export async function searchMovies(query, signal) {
-    const rawData = await tmdbFetch('/search/movie', { query }, signal);
+    const rawData = await apiFetch('/api/movies', { query }, signal);
 
     return rawData.results.map(toMovie);
 }

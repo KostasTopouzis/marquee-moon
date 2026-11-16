@@ -1,5 +1,52 @@
 # The Marquee Moon changelog
 
+v0.4.0: Move TMDB calls to Vercel Functions | 2026-11-16 11:51
+
+Category: architecture
+
+- api/_errors.js: HttpError class and toErrorResponse(), the single
+  place where server errors become { error: { code, message } } JSON.
+- api/_tmdb.js: server-side TMDB helper that reads the token from
+  process.env, times out after 8 seconds and maps TMDB failures to our
+  own status codes (401 -> 500, 429 -> 503, network -> 504, other 502).
+- api/movies/popular.js: GET /api/movies/popular with error handling
+  and a one-hour CDN cache header.
+- api/movies/index.js: GET /api/movies?query=... replaces the planned
+  search.js; validates the query (required, 100 characters maximum)
+  and forwards no other parameters to TMDB.
+- src/services/api.js: calls the /api endpoints instead of TMDB, so
+  the browser bundle no longer contains the token. New ApiError and
+  apiFetch turn error responses back into exceptions.
+
+Category: frontend
+
+- src/pages/Home.jsx: error messages depend on the status code;
+  aborted requests are no longer reported as failures, which removes
+  the false "Failed to load movies..." in development; a new search
+  cancels the request still in flight; the grid shows server results
+  without client-side filtering; an empty search returns to popular
+  films; the heading names the active query.
+- src/components/MovieCard.jsx: placeholder with the title when a
+  film has no poster or the image fails to load.
+
+Category: tooling
+
+- eslint.config.js: Node globals for api/ and the notes folder
+  ignored.
+- .gitignore: ignore .vercel and all .env files.
+
+Category: documentation
+
+- docs/progress.md: backend layer done; pagination is next, and
+  accessibility is added to the roadmap.
+- docs/problems_faced.md, docs/skills_improved.md: first entries on
+  moving the TMDB calls to serverless functions.
+- docs/to_fix.md: false error message fixed; pagination added.
+- README.md: How to Run now uses vercel dev and a server-side
+  TMDB_READ_ACCESS_TOKEN; Future Goals and To Fix point to pagination.
+- package.json, package-lock.json, README.md: version bumped to 0.4.0.
+
+
 v0.3.1: Merge TMDB search into main with CI | 2026-10-28 14:23
 
 Category: tooling
